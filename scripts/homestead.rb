@@ -139,6 +139,11 @@ class Homestead
       end
     end
 
+    # Pre Setup Scripts.
+    config.vm.provision "shell" do |s|
+        s.path = scriptDir + "/pre-setup.sh"
+    end
+    
     # Install All The Configured Nginx Sites
     config.vm.provision "shell" do |s|
         s.path = scriptDir + "/clear-nginx.sh"
@@ -241,5 +246,11 @@ class Homestead
         ]
       end
     end
+        
+    # Post Setup Scripts.
+    config.vm.provision "shell" do |s|
+        s.path = scriptDir + "/post-setup.sh"
+    end
+    
   end
 end
