@@ -9,6 +9,9 @@ class Homestead
     # Prevent TTY Errors
     config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 
+    # Allow In-Secure Keys
+    config.ssh.insert_key = false
+
     # Allow SSH Agent Forward from The Box
     config.ssh.forward_agent = true
 
@@ -230,9 +233,9 @@ class Homestead
     end
 
     # Update Composer On Every Provision
-    config.vm.provision "shell" do |s|
-      s.inline = "/usr/local/bin/composer self-update"
-    end
+    #config.vm.provision "shell" do |s|
+    #  s.inline = "/usr/local/bin/composer self-update"
+    #end
 
     # Configure Blackfire.io
     if settings.has_key?("blackfire")

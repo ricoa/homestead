@@ -4,11 +4,19 @@
 
 echo "vagrant    ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers.d/80-webservice-init-users
 
+/bin/sed -ie '/LANG=/c LANG="zh_CN.UTF-8"' /etc/default/locale
+/bin/sed -ie '/LANGUAGE=/c LANGUAGE="zh_CN:zh"' /etc/default/locale
+
+locale-gen zh_CN.UTF-8 en_US.UTF-8
+
+cp -af /etc/apt/sources.list /etc/apt/sources.list.orig_bak
+/bin/sed -i 's/us.archive/cn.archive/g' /etc/apt/sources.list
+apt-get update -y
+
 /bin/sed -i 's/^zend_extension/;zend_extension/g' /etc/php/7.0/mods-available/xdebug.ini
 /bin/sed -i 's/^zend_extension/;zend_extension/g' /etc/php/5.6/mods-available/xdebug.ini
 
 apt-get install -y zsh
-
 
 cat >/home/vagrant/.myenvset <<'EOF'
 # some more ls aliases
@@ -83,39 +91,46 @@ chmod -R g+rw /home/vagrant/etc/shadowsocks.json
 cat >/home/vagrant/bin/upssinfo.sh <<'EOF'
 #!/usr/bin/env bash
 
-sscontent=`curl -sL http://www.ishadowsocks.net/`;
-sscontent_subdata=`echo "$sscontent" |grep -Eo '<h4>B服务器地址:[^状态]+<h4>状态'`;
+sscontent_subdata=`curl -sL http://www.ishadowsocks.net/ |tr '\n' ' ' | grep -Eo '<h4>B服务器地址:[^状态]+<h4>状态'`;
+if [ ${#sscontent_subdata} -gt 0 ]; then
 
-sscontent_server=`echo "$sscontent_subdata" |grep -Eo '<h4>B服务器地址:[^<]+</h4>' |grep -Eo ':[^<]+'`;
-last_ssserver=`expr substr "$sscontent_server" 2 ${#sscontent_server}`;
+    sscontent_server=`echo "$sscontent_subdata" |grep -Eo '<h4>B服务器地址:[^<]+</h4>' |grep -Eo ':[^<]+'`;
+    last_ssserver=`expr substr "$sscontent_server" 2 ${#sscontent_server}`;
 
-sscontent_port=`echo "$sscontent_subdata" |grep -Eo '<h4>端口:[^<]+</h4>' |grep -Eo ':[^<]+'`;
-last_ssport=`expr substr "$sscontent_port" 2 ${#sscontent_port}`;
+    sscontent_port=`echo "$sscontent_subdata" |grep -Eo '<h4>端口:[^<]+</h4>' |grep -Eo ':[^<]+'`;
+    last_ssport=`expr substr "$sscontent_port" 2 ${#sscontent_port}`;
 
-sscontent_passwd=`echo "$sscontent_subdata" |grep -Eo '<h4>B密码:[^<]+</h4>' |grep -Eo ':[^<]+'`;
-last_sspasswd=`expr substr "$sscontent_passwd" 2 ${#sscontent_passwd}`;
+    sscontent_passwd=`echo "$sscontent_subdata" |grep -Eo '<h4>B密码:[^<]+</h4>' |grep -Eo ':[^<]+'`;
+    last_sspasswd=`expr substr "$sscontent_passwd" 2 ${#sscontent_passwd}`;
 
-sscontent_method=`echo "$sscontent_subdata" |grep -Eo '<h4>加密方式:[^<]+</h4>' |grep -Eo ':[^<]+'`;
-last_ssmethod=`expr substr "$sscontent_method" 2 ${#sscontent_method}`;
+    sscontent_method=`echo "$sscontent_subdata" |grep -Eo '<h4>加密方式:[^<]+</h4>' |grep -Eo ':[^<]+'`;
+    last_ssmethod=`expr substr "$sscontent_method" 2 ${#sscontent_method}`;
 
 
-#echo $last_ssserver;
-#echo $last_ssport;
-#echo $last_sspasswd;
-#echo $last_ssmethod;
+    #echo "got ss server: $last_ssserver";
+    #echo "got ss server_port: $last_ssport";
+    #echo "got ss passwd: $last_sspasswd";
+    #echo "got ss method: $last_ssmethod";
 
-sed -ie "/\"server\":/c \"server\":\"${last_ssserver}\"\," ./shadowsocks.json;
-sed -ie "/\"server_port\":/c \"server_port\":\"${last_ssport}\"\," ./shadowsocks.json;
-sed -ie "/\"password\":/c \"password\":\"${last_sspasswd}\"\," ./shadowsocks.json;
-sed -ie "/\"method\":/c \"method\":\"${last_ssmethod}\"" ./shadowsocks.json;
-
+    sed -ie "/\"server\":/c \"server\":\"${last_ssserver}\"\," /home/vagrant/etc/shadowsocks.json;
+    sed -ie "/\"server_port\":/c \"server_port\":\"${last_ssport}\"\," /home/vagrant/etc/shadowsocks.json;
+    sed -ie "/\"password\":/c \"password\":\"${last_sspasswd}\"\," /home/vagrant/etc/shadowsocks.json;
+    sed -ie "/\"method\":/c \"method\":\"${last_ssmethod}\"" /home/vagrant/etc/shadowsocks.json;
+else
+    echo "match subdata content length: ${#sscontent_subdata} ";
+fi
 EOF
 chown -R vagrant:vagrant /home/vagrant/bin/upssinfo.sh
 chmod -R g+rwx /home/vagrant/bin/upssinfo.sh
 mkdir -p /etc/cron.d 2>/dev/null
-ssupdateinfocron="0 */2 * * * vagrant /usr/bin/bash /home/vagrant/bin/upssinfo.sh >> /dev/null 2>&1"
+ssupdateinfocron="0 */2 * * * vagrant /bin/bash /home/vagrant/bin/upssinfo.sh >> /dev/null 2>&1"
 echo "$ssupdateinfocron" > "/etc/cron.d/ssupdateinfo"
 service cron restart
+
+sudo su - vagrant <<'EOF'
+chmod +x /home/vagrant/bin/upssinfo.sh
+/bin/bash /home/vagrant/bin/upssinfo.sh
+EOF
 
 
 cat >/home/vagrant/etc/supervisor/conf.d/sslocal.conf <<'EOF'
