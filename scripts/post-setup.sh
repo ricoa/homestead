@@ -49,6 +49,16 @@ sudo chsh vagrant -s $(which zsh)
 /bin/sed -ie '/.myenvset/ d; $a if [ -f ~/.myenvset ]; then source ~/.myenvset;fi' /home/vagrant/.profile
 /bin/sed -ie '/.myenvlocal/ d; $a if [ -f ~/.myenvlocal ]; then source ~/.myenvlocal;fi' /home/vagrant/.profile
 
+sudo su - vagrant <<'EOF'
+
+wget https://phar.phpunit.de/phpunit.phar /home/vagrant/var/tmp/
+chmod +x /home/vagrant/var/tmp/phpunit.phar
+
+EOF
+mv /home/vagrant/var/tmp/phpunit.phar /usr/local/bin/phpunit
+chmod +x /usr/local/bin/phpunit
+chown -R vagrant:vagrant /usr/local/bin/phpunit
+chmod g+rwx /usr/local/bin/phpunit
 
 sudo su - vagrant <<'EOF'
 /usr/local/bin/composer config -g secure-http false
