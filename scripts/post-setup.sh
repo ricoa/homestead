@@ -51,7 +51,7 @@ sudo chsh vagrant -s $(which zsh)
 
 sudo su - vagrant <<'EOF'
 
-wget https://phar.phpunit.de/phpunit.phar /home/vagrant/var/tmp/
+wget https://phar.phpunit.de/phpunit.phar -O /home/vagrant/var/tmp/phpunit.phar
 chmod +x /home/vagrant/var/tmp/phpunit.phar
 
 EOF
