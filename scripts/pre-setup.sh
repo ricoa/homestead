@@ -11,6 +11,25 @@ locale-gen zh_CN.UTF-8 en_US.UTF-8
 
 cp -af /etc/apt/sources.list /etc/apt/sources.list.orig_bak
 /bin/sed -i 's/us.archive/cn.archive/g' /etc/apt/sources.list
+cp -af /etc/apt/sources.list /etc/apt/sources.list.cn_offical
+
+cat >/etc/apt/sources.list.cn_163 <<'EOF'
+
+deb http://mirrors.163.com/ubuntu/ trusty main restricted universe multiverse
+deb http://mirrors.163.com/ubuntu/ trusty-security main restricted universe multiverse
+deb http://mirrors.163.com/ubuntu/ trusty-updates main restricted universe multiverse
+deb http://mirrors.163.com/ubuntu/ trusty-proposed main restricted universe multiverse
+deb http://mirrors.163.com/ubuntu/ trusty-backports main restricted universe multiverse
+deb-src http://mirrors.163.com/ubuntu/ trusty main restricted universe multiverse
+deb-src http://mirrors.163.com/ubuntu/ trusty-security main restricted universe multiverse
+deb-src http://mirrors.163.com/ubuntu/ trusty-updates main restricted universe multiverse
+deb-src http://mirrors.163.com/ubuntu/ trusty-proposed main restricted universe multiverse
+deb-src http://mirrors.163.com/ubuntu/ trusty-backports main restricted universe multiverse
+
+EOF
+
+cp -af /etc/apt/sources.list.cn_163 /etc/apt/sources.list
+
 apt-get update -y
 
 /bin/sed -i 's/^zend_extension/;zend_extension/g' /etc/php/7.0/mods-available/xdebug.ini
