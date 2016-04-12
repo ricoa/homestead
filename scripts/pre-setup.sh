@@ -70,11 +70,12 @@ proxy_disable() {
 }
 EOF
 
-apt-get install -y privoxy
+apt-get install -y privoxy proxychains
 
 /bin/sed -ie '$a forward-socks5 / 127.0.0.1:1080 .' /etc/privoxy/config
 /bin/sed -ie '$a listen-address  0.0.0.0:1984' /etc/privoxy/config
-
+/bin/sed -i 's/^socks4/#socks4/g' /etc/proxychains.conf
+/bin/sed -ie '$a socks5    127.0.0.1 1080' /etc/proxychains.conf
 service privoxy restart
 
 apt-get install -y python-pip
