@@ -48,6 +48,8 @@ alias vi='vim'
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
+alias cnpm="npm --registry=https://registry.npm.taobao.org"
+
 export LANG="zh_CN.UTF-8"
 export LC_ALL="zh_CN.UTF-8"
 export EDITOR="vim"

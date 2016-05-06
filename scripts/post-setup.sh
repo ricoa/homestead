@@ -7,6 +7,8 @@
 #export ftp_proxy="127.0.0.1:1984"
 #export no_proxy="localhost,127.0.0.1,.example.com"
 
+#npm install -g cnpm --registry=https://registry.npm.taobao.org
+
 chown -R vagrant:vagrant /usr/local/bin
 chmod g+rwx /usr/local/bin
 
