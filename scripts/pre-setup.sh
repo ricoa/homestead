@@ -145,7 +145,7 @@ EOF
 chown -R vagrant:vagrant /home/vagrant/bin/upssinfo.sh
 chmod -R g+rwx /home/vagrant/bin/upssinfo.sh
 mkdir -p /etc/cron.d 2>/dev/null
-ssupdateinfocron="0 */2 * * * vagrant /bin/bash /home/vagrant/bin/upssinfo.sh >> /dev/null 2>&1"
+ssupdateinfocron="#0 */2 * * * vagrant /bin/bash /home/vagrant/bin/upssinfo.sh >> /dev/null 2>&1"
 echo "$ssupdateinfocron" > "/etc/cron.d/ssupdateinfo"
 service cron restart
 
