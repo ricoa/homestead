@@ -113,10 +113,10 @@ chmod -R g+rw /home/vagrant/etc/shadowsocks.json
 cat >/home/vagrant/bin/upssinfo.sh <<'EOF'
 #!/usr/bin/env bash
 
-sscontent_subdata=`curl -sL http://www.ishadowsocks.net/ |tr '\n' ' ' | grep -Eo '<h4>B服务器地址:[^状态]+<h4>状态'`;
+sscontent_subdata=`curl -sL http://www.ishadowsocks.net/ |tr '\n' ' ' | grep -Eo '<h4>A服务器地址:[^状态]+<h4>状态'`;
 if [ ${#sscontent_subdata} -gt 0 ]; then
 
-    sscontent_server=`echo "$sscontent_subdata" |grep -Eo '<h4>B服务器地址:[^<]+</h4>' |grep -Eo ':[^<]+'`;
+    sscontent_server=`echo "$sscontent_subdata" |grep -Eo '<h4>A服务器地址:[^<]+</h4>' |grep -Eo ':[^<]+'`;
     last_ssserver=`expr substr "$sscontent_server" 2 ${#sscontent_server}`;
 
     sscontent_port=`echo "$sscontent_subdata" |grep -Eo '<h4>端口:[^<]+</h4>' |grep -Eo ':[^<]+'`;
