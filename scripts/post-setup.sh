@@ -72,9 +72,9 @@ sudo su - vagrant <<'EOF'
 #export ftp_proxy="127.0.0.1:1984"
 #export no_proxy="localhost,127.0.0.1,.example.com"
 
+/usr/local/bin/composer global require "kherge/box=~2.4" --prefer-source
 /usr/local/bin/composer global require "laravel/envoy=~1.0"
 /usr/local/bin/composer global require "laravel/installer"
-/usr/local/bin/composer global require "kherge/box=~2.4" --prefer-source
 /usr/local/bin/composer global require psy/psysh:@stable
 
 #unset http_proxy
