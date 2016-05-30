@@ -72,7 +72,7 @@ proxy_disable() {
 }
 EOF
 
-apt-get install -y privoxy proxychains
+apt-get install -y privoxy proxychains supervisor
 
 /bin/sed -ie '$a forward-socks5 / 127.0.0.1:1080 .' /etc/privoxy/config
 /bin/sed -ie '$a listen-address  0.0.0.0:1984' /etc/privoxy/config
