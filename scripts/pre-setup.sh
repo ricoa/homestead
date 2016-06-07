@@ -4,8 +4,8 @@
 
 echo "vagrant    ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers.d/80-webservice-init-users
 
-/bin/sed -ie '/LANG=/c LANG="zh_CN.UTF-8"' /etc/default/locale
-/bin/sed -ie '/LANGUAGE=/c LANGUAGE="zh_CN:zh"' /etc/default/locale
+/bin/sed -i -e '/LANG=/c LANG="zh_CN.UTF-8"' /etc/default/locale
+/bin/sed -i -e '/LANGUAGE=/c LANGUAGE="zh_CN:zh"' /etc/default/locale
 
 locale-gen zh_CN.UTF-8 en_US.UTF-8
 
@@ -74,10 +74,10 @@ EOF
 
 apt-get install -y privoxy proxychains supervisor
 
-/bin/sed -ie '$a forward-socks5 / 127.0.0.1:1080 .' /etc/privoxy/config
-/bin/sed -ie '$a listen-address  0.0.0.0:1984' /etc/privoxy/config
+/bin/sed -i -e '$a forward-socks5 / 127.0.0.1:1080 .' /etc/privoxy/config
+/bin/sed -i -e '$a listen-address  0.0.0.0:1984' /etc/privoxy/config
 /bin/sed -i 's/^socks4/#socks4/g' /etc/proxychains.conf
-/bin/sed -ie '$a socks5    127.0.0.1 1080' /etc/proxychains.conf
+/bin/sed -i -e '$a socks5    127.0.0.1 1080' /etc/proxychains.conf
 service privoxy restart
 
 apt-get install -y python-pip
@@ -134,10 +134,10 @@ if [ ${#sscontent_subdata} -gt 0 ]; then
     #echo "got ss passwd: $last_sspasswd";
     #echo "got ss method: $last_ssmethod";
 
-    sed -ie "/\"server\":/c \"server\":\"${last_ssserver}\"\," /home/vagrant/etc/shadowsocks.json;
-    sed -ie "/\"server_port\":/c \"server_port\":\"${last_ssport}\"\," /home/vagrant/etc/shadowsocks.json;
-    sed -ie "/\"password\":/c \"password\":\"${last_sspasswd}\"\," /home/vagrant/etc/shadowsocks.json;
-    sed -ie "/\"method\":/c \"method\":\"${last_ssmethod}\"" /home/vagrant/etc/shadowsocks.json;
+    sed -i -e "/\"server\":/c \"server\":\"${last_ssserver}\"\," /home/vagrant/etc/shadowsocks.json;
+    sed -i -e "/\"server_port\":/c \"server_port\":\"${last_ssport}\"\," /home/vagrant/etc/shadowsocks.json;
+    sed -i -e "/\"password\":/c \"password\":\"${last_sspasswd}\"\," /home/vagrant/etc/shadowsocks.json;
+    sed -i -e "/\"method\":/c \"method\":\"${last_ssmethod}\"" /home/vagrant/etc/shadowsocks.json;
 else
     echo "match subdata content length: ${#sscontent_subdata} ";
 fi
@@ -180,6 +180,6 @@ chown -R vagrant:vagrant /home/vagrant/etc/supervisor/conf.d/sslocal.conf
 chmod -R g+rw /home/vagrant/etc/supervisor/conf.d/sslocal.conf
 
 /bin/sed -i 's/files = /;files = /g' /etc/supervisor/supervisord.conf
-/bin/sed -ie '$a files = /home/vagrant/etc/supervisor/conf.d/*.conf' /etc/supervisor/supervisord.conf
+/bin/sed -i -e '$a files = /home/vagrant/etc/supervisor/conf.d/*.conf' /etc/supervisor/supervisord.conf
 
 service supervisor restart

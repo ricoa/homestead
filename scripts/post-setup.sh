@@ -37,8 +37,8 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/mas
 
 /bin/sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="ys"/g' /home/vagrant/.zshrc
 /bin/sed -i 's/plugins=(git)/plugins=(git composer laravel5 docker github httpie history jsontools last-working-dir web-search npm node catimg zsh-autosuggestions zsh-syntax-highlighting)/g' /home/vagrant/.zshrc
-/bin/sed -ie '/.myenvset/ d; $a if [ -f ~/.myenvset ]; then source ~/.myenvset;fi' /home/vagrant/.zshrc
-/bin/sed -ie '/.myenvlocal/ d; $a if [ -f ~/.myenvlocal ]; then source ~/.myenvlocal;fi' /home/vagrant/.zshrc
+/bin/sed -i -e '/.myenvset/ d; $a if [ -f ~/.myenvset ]; then source ~/.myenvset;fi' /home/vagrant/.zshrc
+/bin/sed -i -e '/.myenvlocal/ d; $a if [ -f ~/.myenvlocal ]; then source ~/.myenvlocal;fi' /home/vagrant/.zshrc
 
 EOF
 cp -rf /home/vagrant/vimset /root/
@@ -48,8 +48,8 @@ ln -nfs /root/vimset/.vimrc_simple /root/.vimrc
 
 sudo chsh vagrant -s $(which zsh)
 
-/bin/sed -ie '/.myenvset/ d; $a if [ -f ~/.myenvset ]; then source ~/.myenvset;fi' /home/vagrant/.profile
-/bin/sed -ie '/.myenvlocal/ d; $a if [ -f ~/.myenvlocal ]; then source ~/.myenvlocal;fi' /home/vagrant/.profile
+/bin/sed -i -e '/.myenvset/ d; $a if [ -f ~/.myenvset ]; then source ~/.myenvset;fi' /home/vagrant/.profile
+/bin/sed -i -e '/.myenvlocal/ d; $a if [ -f ~/.myenvlocal ]; then source ~/.myenvlocal;fi' /home/vagrant/.profile
 
 sudo su - vagrant <<'EOF'
 
